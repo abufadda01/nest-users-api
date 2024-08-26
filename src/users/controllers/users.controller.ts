@@ -1,6 +1,7 @@
 import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Query, Req, Res, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dtos/CreateUser.dto';
+import { ValidateCreateUserPipe } from '../pipes/validate-create-user/validate-create-user.pipe';
 
 
 @Controller('users')
@@ -17,18 +18,22 @@ export class UsersController {
 
 
     @Get("posts")
+    // @UsePipes(ParseIntPipe, ValidationPipe) // combine multi pipes
     getUsersPosts(){
         return []
     }
 
  
     @Post()
-    @UsePipes(new ValidationPipe()) // now we trigger that we must go to our dto definition class and check what validation cases we have and compare it with our req body object , and this validation pipe case will be applied to route level , also we can add it inside the @Body() decorator
-    // userDto will be the extracted json object from the req body , its structure and properties will be as the defined dto , but still has no validatin cases to check the required keys and required values we must add validation cases 
-    createUser(@Body() userDto : CreateUserDto){
+    // now we trigger that we must go to our dto definition class and check what validation cases we have and compare it with our req body object , and this validation pipe case will be applied to route level , also we can add it inside the @Body() decorator , Used to validate incoming data against DTOs
+    @UsePipes(new ValidationPipe()) 
+    // userDto will be the extracted json object from the req body , its structure and properties will be as the defined dto , but still has no validatin cases to check the required keys and required values so we must add validation cases as pipes 
+    // the ValidateCreateUserPipe custom pipe will has access to our incomming req body object and make any nesscsary transformation , to make sure that if we want to use any of the req body object keys to use it with its correct value and type
+    createUser(@Body(new ValidateCreateUserPipe()) userDto : CreateUserDto){
         return this.usersService.createUser(userDto)
     }
 
+    
 
     @Get("/:id") // add defined params to the req url called id
     getUserById(@Param("id" , ParseIntPipe) id : number){ // build in pipe ParseIntPipe that convert our id to integer number value to check that its a number 
