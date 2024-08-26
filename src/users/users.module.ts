@@ -10,7 +10,7 @@ import { AnotherMiddleware } from './middlewares/another/another.middleware';
 })
 
 
-// to add our middleware we need to register it , configure it 
+// to add our middleware we need to register it , configure it in our module
 export class UsersModule implements NestModule {
   configure(consumer: MiddlewareConsumer) {
     // consumer main middleware we use to apply any of our middlewares by using .apply(our_middleware_class).forRoutes("route_name_inside_the_@Controller(route_name)") // or pass the UsersController class it self , to apply this middleware for all this controller routes  
@@ -27,7 +27,7 @@ export class UsersModule implements NestModule {
       },
       {
       path : "users/:id" ,
-      method : RequestMethod.GET
+      method : RequestMethod.GET 
       },
       {
       path : "users" ,

@@ -30,3 +30,4 @@ export class ExampleMiddleware implements NestMiddleware {
 // middleware function that called before the route handler method to apply or check certain thing
 // middleware function has access to the request and response object and the next function that allows us to call next middleware function in the middleware pipline
 // nest g mi middleware_name  // to generate new middlware file
+// Middleware: Used to modify the request/response before it reaches the route handler. Executes during the request/response cycle, usually before the route handler.
