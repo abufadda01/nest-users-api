@@ -1,10 +1,12 @@
-import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Query, Req, Res, UsePipes, ValidationPipe } from '@nestjs/common';
+import { Body, Controller, Get, HttpException, HttpStatus, Param, ParseIntPipe, Post, Query, Req, Res, UseGuards, UsePipes, ValidationPipe } from '@nestjs/common';
 import { UsersService } from '../services/users.service';
 import { CreateUserDto } from '../dtos/CreateUser.dto';
 import { ValidateCreateUserPipe } from '../pipes/validate-create-user/validate-create-user.pipe';
+import { AuthGuard } from '../guards/auth/auth.guard';
 
 
 @Controller('users')
+@UseGuards(AuthGuard) // controller level guard will be applied to all controller routes methods
 export class UsersController {
 
     // inject our user service in our controller , define it only once in the constructor to not make new instance in each controller route 
@@ -12,6 +14,7 @@ export class UsersController {
 
 
     @Get()
+    // @UseGuards(AuthGuard) // ROUTE LEVEL GUARD 
     getUsers(){
         return this.usersService.getAllUsers()
     }
